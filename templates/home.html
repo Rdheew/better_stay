@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
+{% if user.is_authenticated %}
+<div class="jumbotron">
+    <h1>Welcome back!</h1>
+</div>
+{% else %}
 <div class="jumbotron">
     <h1>Welcome to Better Stay</h1>
-    <p>Better Stay</p>
+    <p>Better Stay gives a better place to stay
+</p>
+    <p><a class="btn btn-lg btn-primary" href="{% url 'registration_register'   %}">Sign up</a></p>
 </div>
+{% endif %}
+
 {% endblock %}
