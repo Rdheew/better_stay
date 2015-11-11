@@ -16,3 +16,13 @@ class Hotel(models.Model):
 
   def get_absolute_url(self):
     return reverse("hotel_detail", args=[self.id])
+
+class Review(models.Model):
+    hotel = models.ForeignKey(Hotel)
+    user = models.ForeignKey(User)
+    created_at = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+
+    def __unicode__(self):
+        return self.text
+
