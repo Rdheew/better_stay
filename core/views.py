@@ -58,5 +58,12 @@ class ReviewUpdateView(UpdateView):
 
     def get_success_url(self):
         return self.object.hotel.get_absolute_url()
+class ReviewDeleteView(DeleteView):
+    model = Review
+    pk_url_kwarg = 'review_pk'
+    template_name = 'review/review_confirm_delete.html'
+
+    def get_success_url(self):
+        return self.object.hotel.get_absolute_url()
 
 
