@@ -2,8 +2,8 @@
 {% block content %}
 {% for hotel in object_list %}
 <div class="panel">
-    <h3>{{ hotel.title }}</h3>
-    <p>Asked by {{ hotel.user.username }} on {{ hotel.created_at }}</p>
+    <h3><a href="{{ hotel.get_absolute_url }}">{{ hotel.title }}</a></h3>
+    <p>Added by {{ hotel.user.username }} on {{ hotel.created_at }}</p>
 </div>
 {% endfor %}
 {% endblock %}

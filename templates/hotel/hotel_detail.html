@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ hotel.title }}</h1>
+<p>{{ hotel.description }}</p>
+<p>Added by {{ hotel.user.username }} on {{ hotel.created_at }}</p>
+{% endblock %}
