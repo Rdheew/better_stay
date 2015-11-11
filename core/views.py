@@ -22,6 +22,14 @@ class HotelListView(ListView):
 class HotelDetailView(DetailView):
     model = Hotel
     template_name = 'hotel/hotel_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HotelDetailView, self).get_context_data(**kwargs)
+        hotel = Hotel.objects.get(id=self.kwargs['pk'])
+        reviews = Review.objects.filter(hotel=hotel)
+        context['reviews'] = reviews
+        return context
+
 class HotelUpdateView(UpdateView):
     model = Hotel
     template_name = 'hotel/hotel_form.html'
@@ -42,4 +50,5 @@ class ReviewCreateView(CreateView):
         form.instance.user = self.request.user
         form.instance.hotel = Hotel.objects.get(id=self.kwargs['pk'])
         return super(ReviewCreateView, self).form_valid(form)
+
 
