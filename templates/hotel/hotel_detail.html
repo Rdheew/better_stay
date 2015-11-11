@@ -3,4 +3,7 @@
 <h1>{{ hotel.title }}</h1>
 <p>{{ hotel.description }}</p>
 <p>Added by {{ hotel.user.username }} on {{ hotel.created_at }}</p>
+{% if hotel.user == user %}
+<p><a href="{% url 'hotel_update' pk=hotel.id %}">Edit hotel</a></p>
+{% endif %}
 {% endblock %}

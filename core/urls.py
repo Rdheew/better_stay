@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'hotel/$', HotelListView.as_view(), name='hotel_list'),
     url(r'hotel/$', HotelListView.as_view(), name='hotel_list'),
     url(r'^hotel/(?P<pk>\d+)/$', HotelDetailView.as_view(), name='hotel_detail'),
+    url(r'^hotel/update/(?P<pk>\d+)/$', HotelUpdateView.as_view(), name='hotel_update'),
 )
