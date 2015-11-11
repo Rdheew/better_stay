@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from .models import *
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 class Home(TemplateView):
@@ -34,10 +35,20 @@ class HotelUpdateView(UpdateView):
     model = Hotel
     template_name = 'hotel/hotel_form.html'
     fields = ['title', 'description']
+    def get_object(self, *args, **kwargs):
+        object = super(HotelUpdateView, self).get_object(*args, **kwargs)
+        if object.user != self.request.user:
+            raise PermissionDenied()
+        return object
 class HotelDeleteView(DeleteView):
     model = Hotel
     template_name = 'hotel/hotel_confirm_delete.html'
     success_url = reverse_lazy('hotel_list')
+    def get_object(self, *args, **kwargs):
+        object = super(HotelDeleteView, self).get_object(*args, **kwargs)
+        if object.user != self.request.user:
+            raise PermissionDenied()
+        return object
 class ReviewCreateView(CreateView):
     model = Review
     template_name = "review/review_form.html"
@@ -58,6 +69,12 @@ class ReviewUpdateView(UpdateView):
 
     def get_success_url(self):
         return self.object.hotel.get_absolute_url()
+
+    def get_object(self, *args, **kwargs):
+        object = super(ReviewUpdateView, self).get_object(*args, **kwargs)
+        if object.user != self.request.user:
+            raise PermissionDenied()
+        return object
 class ReviewDeleteView(DeleteView):
     model = Review
     pk_url_kwarg = 'review_pk'
@@ -65,5 +82,11 @@ class ReviewDeleteView(DeleteView):
 
     def get_success_url(self):
         return self.object.hotel.get_absolute_url()
+
+    def get_object(self, *args, **kwargs):
+        object = super(ReviewDeleteView, self).get_object(*args, **kwargs)
+        if object.user != self.request.user:
+            raise PermissionDenied()
+        return object
 
 
