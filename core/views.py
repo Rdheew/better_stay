@@ -100,8 +100,18 @@ class VoteFormView(FormView):
     form_class = VoteForm
 
     def form_valid(self, form):
-        user = self.request.user
-        hotel = Hotel.objects.get(pk=form.data["hotel"])
+      user = self.request.user
+      hotel = Hotel.objects.get(pk=form.data["hotel"])
+      try:
+        review = Review.objects.get(pk=form.data["review"])
+        prev_votes = Vote.objects.filter(user=user, review=review)
+        has_voted = (prev_votes.count()>0)
+        if not has_voted:
+            Vote.objects.create(user=user, review=review)
+        else:
+            prev_votes[0].delete()
+        return redirect(reverse('hotel_detail', args=[form.data["hotel"]]))
+      except:
         prev_votes = Vote.objects.filter(user=user, hotel=hotel)
         has_voted = (prev_votes.count()>0)
         if not has_voted:
