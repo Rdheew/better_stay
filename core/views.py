@@ -3,6 +3,9 @@ from django.views.generic import TemplateView, CreateView, ListView, DetailView,
 from django.core.urlresolvers import reverse_lazy
 from .models import *
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
+from django.views.generic import FormView
+from .forms import *
 
 # Create your views here.
 class Home(TemplateView):
@@ -93,5 +96,18 @@ class ReviewDeleteView(DeleteView):
         if object.user != self.request.user:
             raise PermissionDenied()
         return object
+class VoteFormView(FormView):
+    form_class = VoteForm
+
+    def form_valid(self, form):
+        user = self.request.user
+        hotel = Hotel.objects.get(pk=form.data["hotel"])
+        prev_votes = Vote.objects.filter(user=user, hotel=hotel)
+        has_voted = (prev_votes.count()>0)
+        if not has_voted:
+            Vote.objects.create(user=user, hotel=hotel)
+        else:
+            prev_votes[0].delete()
+        return redirect('hotel_list')
 
 
