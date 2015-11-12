@@ -165,6 +165,11 @@ class UserDeleteView(DeleteView):
         user = super(UserDeleteView, self).get_object(*args)
         user.is_active = False
         user.save()
-        return redirect(self.get_success_url())      
+        return redirect(self.get_success_url()) 
+
+class SearchHotelListView(HotelListView):
+    def get_queryset(self):
+        incoming_query_string = self.request.GET.get('query','')
+        return Hotel.objects.filter(title__icontains=incoming_query_string)      
 
 
