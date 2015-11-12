@@ -15,8 +15,11 @@ class HotelCreateView(CreateView):
     success_url = reverse_lazy('hotel_list')
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super(HotelCreateView, self).form_valid(form)
+         hotel = Hotel.objects.get(id=self.kwargs['pk'])
+         if Review.objects.filter(hotel=hotel, user=self.request.user).exists():
+          raise PermissionDenied()
+          form.instance.user = self.request.user
+          return super(HotelCreateView, self).form_valid(form)
 class HotelListView(ListView):
     model = Hotel
     template_name = "hotel/hotel_list.html"
@@ -29,6 +32,8 @@ class HotelDetailView(DetailView):
         hotel = Hotel.objects.get(id=self.kwargs['pk'])
         reviews = Review.objects.filter(hotel=hotel)
         context['reviews'] = reviews
+        user_reviews = Review.objects.filter(hotel=hotel, user=self.request.user)
+        context['user_reviews'] = user_reviews
         return context
 
 class HotelUpdateView(UpdateView):
