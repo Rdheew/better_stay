@@ -18,14 +18,13 @@ class HotelCreateView(CreateView):
     success_url = reverse_lazy('hotel_list')
 
     def form_valid(self, form):
-         hotel = Hotel.objects.get(id=self.kwargs['pk'])
-         if Review.objects.filter(hotel=hotel, user=self.request.user).exists():
-          raise PermissionDenied()
-          form.instance.user = self.request.user
-          return super(HotelCreateView, self).form_valid(form)
+      form.instance.user = self.request.user
+      return super(HotelCreateView, self).form_valid(form)
+
 class HotelListView(ListView):
     model = Hotel
     template_name = "hotel/hotel_list.html"
+    paginate_by = 5
 class HotelDetailView(DetailView):
     model = Hotel
     template_name = 'hotel/hotel_detail.html'
@@ -151,7 +150,7 @@ class UserDeleteView(DeleteView):
     model = User
     slug_field = "username"
     template_name = 'user/user_confirm_delete.html'
-    
+
     def get_success_url(self):
         return reverse_lazy('logout')
 
@@ -160,16 +159,16 @@ class UserDeleteView(DeleteView):
         if object != self.request.user:
             raise PermissionDenied()
         return object
-    
+
     def delete(self, request, *args, **kwargs):
         user = super(UserDeleteView, self).get_object(*args)
         user.is_active = False
         user.save()
-        return redirect(self.get_success_url()) 
+        return redirect(self.get_success_url())
 
 class SearchHotelListView(HotelListView):
     def get_queryset(self):
         incoming_query_string = self.request.GET.get('query','')
-        return Hotel.objects.filter(title__icontains=incoming_query_string)      
+        return Hotel.objects.filter(title__icontains=incoming_query_string)
 
 
