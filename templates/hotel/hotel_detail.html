@@ -2,7 +2,7 @@
 {% block content %}
 <h1>{{ hotel.title }}</h1>
 <p>{{ hotel.description }}</p>
-<p>Added by {{ hotel.user.username }} on {{ hotel.created_at }}</p>
+<p>Added by <a href="{% url 'user_detail' slug=hotel.user.username %}">{{ hotel.user.username }}</a> on {{ hotel.created_at }}</p>
 {% if hotel.user == user %}
 <p><a href="{% url 'hotel_update' pk=hotel.id %}">Edit hotel</a></p>
 <p><a href="{% url 'hotel_delete' pk=hotel.id %}">Delete hotel</a></p>
@@ -17,8 +17,7 @@
 <p><a href="{% url 'review_update' hotel_pk=hotel.id review_pk=review.id %}">Edit review</a></p>
 <p><a href="{% url 'review_delete' hotel_pk=hotel.id review_pk=review.id %}">Delete review</a></p>
 {% endif %}
-    <p>Reviewed by {{ review.user.username }} on {{ review.created_at }}</p>
-<p>{{ review.vote_set.all.count }} Vote{{ review.vote_set.all.count|pluralize }}</p>
+    <p>Reviewed by <a href="{% url 'user_detail' slug=review.user.username %}">{{ review.user.username }}</a> on {{ review.created_at }} ({{ review.vote_set.all.count }} Vote{{ review.vote_set.all.count|pluralize }})</p>
 <form method="post" action="{% url 'vote' %}">
     {% csrf_token %}
     <input type="hidden" name="review" value="{{ review.id }}" />
