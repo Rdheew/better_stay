@@ -25,6 +25,12 @@ class HotelListView(ListView):
     model = Hotel
     template_name = "hotel/hotel_list.html"
     paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super(HotelListView, self).get_context_data(**kwargs)
+        user_votes = Hotel.objects.filter(vote__user=self.request.user)
+        context['user_votes'] = user_votes
+        return context
 class HotelDetailView(DetailView):
     model = Hotel
     template_name = 'hotel/hotel_detail.html'
@@ -36,6 +42,8 @@ class HotelDetailView(DetailView):
         context['reviews'] = reviews
         user_reviews = Review.objects.filter(hotel=hotel, user=self.request.user)
         context['user_reviews'] = user_reviews
+        user_votes = Review.objects.filter(vote__user=self.request.user)
+        context['user_votes'] = user_votes
         return context
 
 class HotelUpdateView(UpdateView):
