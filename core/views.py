@@ -14,7 +14,7 @@ class Home(TemplateView):
 class HotelCreateView(CreateView):
     model = Hotel
     template_name = "hotel/hotel_form.html"
-    fields = ['title', 'description']
+    fields = ['title', 'description', 'visibility']
     success_url = reverse_lazy('hotel_list')
 
     def form_valid(self, form):
@@ -59,7 +59,7 @@ class HotelDeleteView(DeleteView):
 class ReviewCreateView(CreateView):
     model = Review
     template_name = "review/review_form.html"
-    fields = ['text']
+    fields = ['text', 'visibility']
 
     def get_success_url(self):
         return self.object.hotel.get_absolute_url()
@@ -127,9 +127,9 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
       context = super(UserDetailView, self).get_context_data(**kwargs)
       user_in_view = User.objects.get(username=self.kwargs['slug'])
-      hotels = Hotel.objects.filter(user=user_in_view)
+      hotels = Hotel.objects.filter(user=user_in_view).exclude(visibility=1)
       context['hotels'] = hotels
-      reviews = Review.objects.filter(user=user_in_view)
+      reviews = Review.objects.filter(user=user_in_view).exclude(visibility=1)
       context['reviews'] = reviews
       return context
 class UserUpdateView(UpdateView):
