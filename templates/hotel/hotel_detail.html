@@ -1,6 +1,49 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>{{ hotel.title }}</h1>
+{% if rating.rating__avg < 0.5 %}
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% elif rating.rating__avg < 1.5 %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% elif rating.rating__avg < 2.5 %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% elif rating.rating__avg < 3.5 %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% elif rating.rating__avg < 4.5 %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star-empty"></span>
+  ({{ rating.rating__avg }})
+{% else %}
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  <span class="glyphicon glyphicon-star"></span>
+  ({{ rating.rating__avg }})
+{% endif %}
 <p>{{ hotel.description }}</p>
 <p>Reviewed {% if review.visibility == 0 %} by <a href="{% url 'user_detail' slug=review.user.username %}">{{ review.user.username }}</a> {% endif %} on {{ review.created_at }}</p>
 <form method="post" action="{% url 'vote' %}">
@@ -20,7 +63,7 @@
     {% endif %}
 </form>
 </div>
-{% endfor %}
+
 {% if not user_reviews %}
 <p><a href="{% url 'review_create' pk=hotel.id %}">Write review</a></p>
 {% endif %}
