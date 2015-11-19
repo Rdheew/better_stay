@@ -87,7 +87,7 @@ class ReviewUpdateView(UpdateView):
     model = Review
     pk_url_kwarg = 'review_pk'
     template_name = 'review/review_form.html'
-    fields = ['text', 'rating']
+    fields = ['text','visibility', 'rating']
 
     def get_success_url(self):
         return self.object.hotel.get_absolute_url()
