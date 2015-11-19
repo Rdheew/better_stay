@@ -2,15 +2,15 @@
 {% block content %}
 {% for hotel in object_list %}
 <div class="panel">
-    <h3><a href="{{ hotel.get_absolute_url }}">{{ hotel.title }}</a></h3>
-    <p>Asked {% if hotel.visibility == 0 %} by <a href="{% url 'user_detail' slug=hotel.user.username %}">{{ hotel.user.username }}</a> {% endif %} on {{ hotel.created_at }}</p>
+    <h3><a href="{{ hotel.get_absolute_url }}">{{ hotel.hotel }}</a></h3>
+    <p>Reviewed {% if hotel.visibility == 0 %} by <a href="{% url 'user_detail' slug=hotel.user.username %}">{{ hotel.user.username }}</a> {% endif %} on {{ hotel.created_at }}</p>
 <form method="post" action="{% url 'vote' %}">
     <span class="badge">{{ hotel.review_set.all.count }} Review{{  hotel.review_set.all.count|pluralize }}</span>
-    <span class="badge">{{ hotel.vote_set.all.count }} Vote{{ hotel.vote_set.all.count|pluralize }}</span> 
+    <span class="badge">{{ hotel.vote_set.all.count }} Vote{{ hotel.vote_set.all.count|pluralize }}</span>
     {% csrf_token %}
     <input type="hidden" name="hotel" value="{{ hotel.id }}" />
     <input type="hidden" name="user" value="{{ user.id }}" />
-        {% if hotel in user_votes %}  
+        {% if hotel in user_votes %}
         <button class="btn btn-link">
           <span class="glyphicon glyphicon-thumbs-down"></span>
         </button>

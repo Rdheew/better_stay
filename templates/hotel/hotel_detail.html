@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>{{ hotel.title }}</h1>
+<h1>{{ hotel.hotel }}</h1>
 {% if rating.rating__avg < 0.5 %}
   <span class="glyphicon glyphicon-star-empty"></span>
   <span class="glyphicon glyphicon-star-empty"></span>
@@ -45,6 +45,7 @@
   ({{ rating.rating__avg }})
 {% endif %}
 <p>{{ hotel.description }}</p>
+<p>{% if hotel.image_file %}<img src="{{ hotel.image_file.url }}" />{% endif %}</p>
 <p>Reviewed {% if review.visibility == 0 %} by <a href="{% url 'user_detail' slug=review.user.username %}">{{ review.user.username }}</a> {% endif %} on {{ review.created_at }}</p>
 <form method="post" action="{% url 'vote' %}">
     <span class="badge">{{ review.vote_set.all.count }} Vote{{  review.vote_set.all.count|pluralize }}</span>

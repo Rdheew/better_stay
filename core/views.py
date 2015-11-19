@@ -15,7 +15,7 @@ class Home(TemplateView):
 class HotelCreateView(CreateView):
     model = Hotel
     template_name = "hotel/hotel_form.html"
-    fields = ['title', 'description', 'visibility']
+    fields = ['hotel', 'description', 'visibility', 'image_file']
     success_url = reverse_lazy('hotel_list')
 
     def form_valid(self, form):
@@ -53,12 +53,13 @@ class HotelDetailView(DetailView):
 class HotelUpdateView(UpdateView):
     model = Hotel
     template_name = 'hotel/hotel_form.html'
-    fields = ['title', 'description']
+    fields = ['hotel', 'description', 'visibility']
     def get_object(self, *args, **kwargs):
         object = super(HotelUpdateView, self).get_object(*args, **kwargs)
         if object.user != self.request.user:
             raise PermissionDenied()
         return object
+
 class HotelDeleteView(DeleteView):
     model = Hotel
     template_name = 'hotel/hotel_confirm_delete.html'
@@ -68,6 +69,7 @@ class HotelDeleteView(DeleteView):
         if object.user != self.request.user:
             raise PermissionDenied()
         return object
+
 class ReviewCreateView(CreateView):
     model = Review
     template_name = "review/review_form.html"
@@ -80,6 +82,7 @@ class ReviewCreateView(CreateView):
         form.instance.user = self.request.user
         form.instance.hotel = Hotel.objects.get(id=self.kwargs['pk'])
         return super(ReviewCreateView, self).form_valid(form)
+
 class ReviewUpdateView(UpdateView):
     model = Review
     pk_url_kwarg = 'review_pk'
@@ -94,6 +97,7 @@ class ReviewUpdateView(UpdateView):
         if object.user != self.request.user:
             raise PermissionDenied()
         return object
+
 class ReviewDeleteView(DeleteView):
     model = Review
     pk_url_kwarg = 'review_pk'
@@ -107,6 +111,7 @@ class ReviewDeleteView(DeleteView):
         if object.user != self.request.user:
             raise PermissionDenied()
         return object
+
 class VoteFormView(FormView):
     form_class = VoteForm
 
@@ -130,6 +135,7 @@ class VoteFormView(FormView):
         else:
             prev_votes[0].delete()
         return redirect('hotel_list')
+
 class UserDetailView(DetailView):
     model = User
     slug_field = 'username'
@@ -181,6 +187,6 @@ class UserDeleteView(DeleteView):
 class SearchHotelListView(HotelListView):
     def get_queryset(self):
         incoming_query_string = self.request.GET.get('query','')
-        return Hotel.objects.filter(title__icontains=incoming_query_string)
+        return Hotel.objects.filter(hotel__icontains=incoming_query_string)
 
 
