@@ -51,6 +51,15 @@
 <p><a href="{% url 'hotel_update' pk=hotel.id %}">Edit hotel</a></p>
 <p><a href="{% url 'hotel_delete' pk=hotel.id %}">Delete hotel</a></p>
 {% endif %}
+{% for review in reviews %}
+<div class="panel">
+    <p>{{ review.text }}</p>
+    {% if review.user == user %}
+    <p><a href="{% url 'review_update' hotel_pk=hotel.id review_pk=review.id %}">Edit review</a><p>
+    <p><a href="{% url 'review_delete' hotel_pk=hotel.id review_pk=review.id %}">Delete review</a><p>
+    {% endif %}
+    <p>Reviewed {% if review.visibility == 0 %} by <a href="{% url 'user_detail' slug=review.user.username %}">{{ review.user.username }}</a> {% endif %} on {{ review.created_at }}</p>
+
 <form method="post" action="{% url 'vote' %}">
     <span class="badge">{{ review.vote_set.all.count }} Vote{{  review.vote_set.all.count|pluralize }}</span>
     {% csrf_token %}
@@ -67,6 +76,8 @@
         </button>
     {% endif %}
 </form>
+</div>
+{% endfor %}
 
 {% if not user_reviews %}
 <p><a href="{% url 'review_create' pk=hotel.id %}">Write review</a></p>

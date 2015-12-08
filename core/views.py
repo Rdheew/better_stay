@@ -53,7 +53,7 @@ class HotelDetailView(DetailView):
 class HotelUpdateView(UpdateView):
     model = Hotel
     template_name = 'hotel/hotel_form.html'
-    fields = ['hotel', 'description', 'visibility']
+    fields = ['hotel', 'description', 'visibility', 'image_file']
     def get_object(self, *args, **kwargs):
         object = super(HotelUpdateView, self).get_object(*args, **kwargs)
         if object.user != self.request.user:
@@ -134,7 +134,7 @@ class VoteFormView(FormView):
             Vote.objects.create(user=user, hotel=hotel)
         else:
             prev_votes[0].delete()
-        return redirect('hotel_list')
+      return redirect('hotel_list')
 
 class UserDetailView(DetailView):
     model = User
